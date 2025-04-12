@@ -112,8 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const iconColor = isDay ? 'text-yellow-500' : 'text-blue-300';
         iconElement.className = `weather-icon text-8xl ${iconColor} ${iconClass}`;
     }
-    
-    function updateDate() {
+       function updateDate() {
         const now = new Date();
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
@@ -121,4 +120,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update every minute to keep time accurate
         setTimeout(updateDate, 60000);
     }
+
+    // 👇 ADD THIS TO DISMISS KEYBOARD ON TOUCH OUTSIDE
+    document.addEventListener('touchstart', function(event) {
+        const isInteractive = event.target.closest('input, textarea, button');
+        if (!isInteractive) {
+            document.activeElement.blur();
+        }
+    });
+
 });
