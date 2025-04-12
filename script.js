@@ -122,11 +122,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 👇 ADD THIS TO DISMISS KEYBOARD ON TOUCH OUTSIDE
-    document.addEventListener('touchstart', function(event) {
-        const isInteractive = event.target.closest('input, textarea, button');
-        if (!isInteractive) {
+   document.addEventListener('touchend', function(event) {
+    const isInteractive = event.target.closest('input, textarea, button');
+    if (!isInteractive) {
+        // Force blur on active input
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
             document.activeElement.blur();
+
+            // This sometimes helps on stubborn mobile browsers
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+            }, 100);
         }
-    });
+    }
+});
 
 });
