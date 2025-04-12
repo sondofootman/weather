@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 Game</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+       
+    </style>
+</head>
+<body class="bg-[#faf8ef] min-h-screen font-sans">
+    <div class="container mx-auto py-10">
+        <div class="game-container">
+            <div class="flex justify-between items-center mb-5">
+                <h1 class="text-6xl font-bold text-[#776e65]">2048</h1>
+                <div class="flex gap-4">
+                    <div class="score-container">
+                        <div class="score-title">Score</div>
+                        <div id="score" class="score-value">0</div>
+                    </div>
+                    <button id="new-game" class="bg-[#8f7a66] text-white px-6 py-3 rounded font-bold hover:bg-[#9f8b77] transition">
+                        New Game
+                    </button>
+                </div>
+            </div>
+            
+            <p class="text-[#776e65] mb-5 text-lg">
+                Join the numbers and get to the <strong>2048 tile!</strong><br>
+                Use <strong>arrow keys</strong> to move the tiles.
+            </p>
+            
+            <div class="grid" id="grid">
+                <!-- Empty cells -->
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                
+                <!-- Game over overlay -->
+                <div id="game-over" class="game-over hidden">
+                    <div class="game-over-text">Game Over!</div>
+                    <button id="try-again" class="bg-[#8f7a66] text-white px-6 py-3 rounded font-bold hover:bg-[#9f8b77] transition">
+                        Try Again
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
