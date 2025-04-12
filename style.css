@@ -1,158 +1,18 @@
- /* Custom styles */
-        .game-container {
-            width: 450px;
-            margin: 0 auto;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, 100px);
-            grid-gap: 10px;
-            padding: 15px;
-            background-color: #bbada0;
-            border-radius: 6px;
-            position: relative;
-        }
-        
-        .cell {
-            width: 100px;
-            height: 100px;
-            background-color: rgba(238, 228, 218, 0.35);
-            border-radius: 3px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 45px;
-            font-weight: bold;
-        }
-        
-        .tile {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border-radius: 3px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 45px;
-            font-weight: bold;
-            transition: all 0.1s ease-in-out;
-            z-index: 10;
-        }
-        
-        .tile-2 {
-            background-color: #eee4da;
-            color: #776e65;
-        }
-        
-        .tile-4 {
-            background-color: #ede0c8;
-            color: #776e65;
-        }
-        
-        .tile-8 {
-            background-color: #f2b179;
-            color: #f9f6f2;
-        }
-        
-        .tile-16 {
-            background-color: #f59563;
-            color: #f9f6f2;
-        }
-        
-        .tile-32 {
-            background-color: #f67c5f;
-            color: #f9f6f2;
-        }
-        
-        .tile-64 {
-            background-color: #f65e3b;
-            color: #f9f6f2;
-        }
-        
-        .tile-128 {
-            background-color: #edcf72;
-            color: #f9f6f2;
-            font-size: 40px;
-        }
-        
-        .tile-256 {
-            background-color: #edcc61;
-            color: #f9f6f2;
-            font-size: 40px;
-        }
-        
-        .tile-512 {
-            background-color: #edc850;
-            color: #f9f6f2;
-            font-size: 40px;
-        }
-        
-        .tile-1024 {
-            background-color: #edc53f;
-            color: #f9f6f2;
-            font-size: 35px;
-        }
-        
-        .tile-2048 {
-            background-color: #edc22e;
-            color: #f9f6f2;
-            font-size: 35px;
-        }
-        
-        .game-over {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(238, 228, 218, 0.73);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            border-radius: 6px;
-        }
-        
-        .game-over-text {
-            font-size: 60px;
-            font-weight: bold;
-            color: #776e65;
-            margin-bottom: 30px;
-        }
-        
-        .score-container {
-            background-color: #bbada0;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 6px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .score-title {
-            font-size: 16px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        
-        .score-value {
-            font-size: 30px;
-            font-weight: bold;
-        }
-        
-        .new-tile {
-            animation: appear 0.2s;
-        }
-        
-        @keyframes appear {
-            0% {
-                opacity: 0;
-                transform: scale(0);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.weather-widget {
+    animation: fadeIn 0.5s ease-in-out;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.weather-icon {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
+
+.refresh-btn:hover {
+    transform: rotate(180deg);
+    transition: transform 0.5s ease;
+}
