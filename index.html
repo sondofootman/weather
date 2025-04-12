@@ -3,64 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2048 Game</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Weather Widget</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.expand(); // Make it full height
+  tg.ready();  // Signal that it's ready
+</script>
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-       
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .weather-widget {
+            animation: fadeIn 0.5s ease-in-out;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .weather-icon {
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+        }
+        
+        .refresh-btn:hover {
+            transform: rotate(180deg);
+            transition: transform 0.5s ease;
+        }
     </style>
 </head>
-<body class="bg-[#faf8ef] min-h-screen font-sans">
-    <div class="container mx-auto py-10">
-        <div class="game-container">
-            <div class="flex justify-between items-center mb-5">
-                <h1 class="text-6xl font-bold text-[#776e65]">2048</h1>
-                <div class="flex gap-4">
-                    <div class="score-container">
-                        <div class="score-title">Score</div>
-                        <div id="score" class="score-value">0</div>
-                    </div>
-                    <button id="new-game" class="bg-[#8f7a66] text-white px-6 py-3 rounded font-bold hover:bg-[#9f8b77] transition">
-                        New Game
-                    </button>
+<body class="bg-amber-100 min-h-screen flex items-center justify-center p-4">
+    <div class="weather-widget bg-gradient-to-br from-yellow-300 to-orange-400 rounded-2xl p-6 w-full max-w-md text-white overflow-hidden relative">
+        <!-- City Search -->
+        <div class="flex items-center mb-6">
+            <input type="text" id="cityInput" placeholder="Enter city..." 
+                   class="bg-yellow-200 text-gray-800 rounded-l-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-orange-500">
+            <button id="searchBtn" class="bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-r-lg transition">
+                <i class="fas fa-search"></i>
+            </button>
+            <button id="refreshBtn" class="refresh-btn ml-2 bg-yellow-400 hover:bg-yellow-500 p-2 rounded-full transition">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+        </div>
+        
+        <!-- Current Weather -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 id="location" class="text-2xl font-bold">London</h2>
+                <p id="currentDate" class="text-gray-100 text-sm">Loading date...</p>
+            </div>
+            <div id="currentTemp" class="text-5xl font-light">--°C</div>
+        </div>
+        
+        <!-- Weather Icon and Condition -->
+        <div class="flex items-center justify-center mb-6">
+            <div class="weather-icon text-8xl" id="weatherIcon">
+                <i class="fas fa-cloud-sun"></i>
+            </div>
+        </div>
+        <p id="weatherCondition" class="text-center text-xl mb-6">Loading...</p>
+        
+        <!-- Weather Details -->
+        <div class="grid grid-cols-2 gap-4 bg-yellow-200 bg-opacity-50 rounded-xl p-4">
+            <div class="flex items-center">
+                <i class="fas fa-temperature-low text-red-400 mr-3 text-xl"></i>
+                <div>
+                    <p class="text-gray-100 text-sm">Feels Like</p>
+                    <p id="feelsLike" class="font-medium">--°C</p>
                 </div>
             </div>
-            
-            <p class="text-[#776e65] mb-5 text-lg">
-                Join the numbers and get to the <strong>2048 tile!</strong><br>
-                Use <strong>arrow keys</strong> to move the tiles.
-            </p>
-            
-            <div class="grid" id="grid">
-                <!-- Empty cells -->
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                <div class="cell"></div>
-                
-                <!-- Game over overlay -->
-                <div id="game-over" class="game-over hidden">
-                    <div class="game-over-text">Game Over!</div>
-                    <button id="try-again" class="bg-[#8f7a66] text-white px-6 py-3 rounded font-bold hover:bg-[#9f8b77] transition">
-                        Try Again
-                    </button>
+            <div class="flex items-center">
+                <i class="fas fa-tint text-blue-400 mr-3 text-xl"></i>
+                <div>
+                    <p class="text-gray-100 text-sm">Humidity</p>
+                    <p id="humidity" class="font-medium">--%</p>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <i class="fas fa-wind text-green-400 mr-3 text-xl"></i>
+                <div>
+                    <p class="text-gray-100 text-sm">Wind</p>
+                    <p id="windSpeed" class="font-medium">-- km/h</p>
+                </div>
+            </div>
+            <div class="flex items-center">
+                <i class="fas fa-eye text-gray-100 mr-3 text-xl"></i>
+                <div>
+                    <p class="text-gray-100 text-sm">Visibility</p>
+                    <p id="visibility" class="font-medium">-- km</p>
                 </div>
             </div>
         </div>
+        
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="absolute inset-0 bg-yellow-300 bg-opacity-80 flex items-center justify-center hidden">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cityInput = document.getElementById('cityInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const refreshBtn = document.getElementById('refreshBtn');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            
+            let currentCity = 'London';
+            
+            // Initial load
+            fetchWeather(currentCity);
+            
+            // Update date
+            updateDate();
+            
+            // Search button click
+            searchBtn.addEventListener('click', () => {
+                if (cityInput.value.trim()) {
+                    currentCity = cityInput.value.trim();
+                    fetchWeather(currentCity);
+                }
+            });
+            
+            // Refresh button click
+            refreshBtn.addEventListener('click', () => {
+                fetchWeather(currentCity);
+            });
+            
+            // Enter key in input field
+            cityInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && cityInput.value.trim()) {
+                    currentCity = cityInput.value.trim();
+                    fetchWeather(currentCity);
+                }
+            });
+            
+            function fetchWeather(city) {
+                loadingIndicator.classList.remove('hidden');
+                
+                // Using wttr.in API
+                fetch(`https://wttr.in/${city}?format=j1`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('City not found');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        updateWeatherUI(data);
+                        loadingIndicator.classList.add('hidden');
+                    })
+                    .catch(error => {
+                        console.error('Error fetching weather:', error);
+                        alert('Error fetching weather data. Please try another city.');
+                        loadingIndicator.classList.add('hidden');
+                    });
+            }
+            
+            function updateWeatherUI(data) {
+                const current = data.current_condition[0];
+                const area = data.nearest_area[0];
+                
+                // Update location
+                document.getElementById('location').textContent = 
+                    `${area.areaName[0].value}, ${area.region[0].value}`;
+                
+                // Update current temp
+                document.getElementById('currentTemp').textContent = `${current.temp_C}°C`;
+                
+                // Update feels like
+                document.getElementById('feelsLike').textContent = `${current.FeelsLikeC}°C`;
+                
+                // Update humidity
+                document.getElementById('humidity').textContent = `${current.humidity}%`;
+                
+                // Update wind speed
+                document.getElementById('windSpeed').textContent = `${current.windspeedKmph} km/h`;
+                
+                // Update visibility
+                document.getElementById('visibility').textContent = `${current.visibility} km`;
+                
+                // Update weather condition
+                const condition = current.weatherDesc[0].value;
+                document.getElementById('weatherCondition').textContent = condition;
+                
+                // Update weather icon based on condition
+                updateWeatherIcon(condition, current.isday === 'yes');
+            }
+            
+            function updateWeatherIcon(condition, isDay) {
+                const iconElement = document.getElementById('weatherIcon');
+                let iconClass = '';
+                
+                condition = condition.toLowerCase();
+                
+                if (condition.includes('sunny') || condition.includes('clear')) {
+                    iconClass = isDay ? 'fas fa-sun' : 'fas fa-moon';
+                } else if (condition.includes('cloud')) {
+                    iconClass = isDay ? 'fas fa-cloud-sun' : 'fas fa-cloud-moon';
+                } else if (condition.includes('rain')) {
+                    iconClass = 'fas fa-cloud-rain';
+                } else if (condition.includes('storm')) {
+                    iconClass = 'fas fa-bolt';
+                } else if (condition.includes('snow')) {
+                    iconClass = 'fas fa-snowflake';
+                } else if (condition.includes('fog') || condition.includes('mist')) {
+                    iconClass = 'fas fa-smog';
+                } else {
+                    iconClass = 'fas fa-cloud';
+                }
+                
+                // Set color based on time
+                const iconColor = isDay ? 'text-yellow-500' : 'text-blue-300';
+                iconElement.className = `weather-icon text-8xl ${iconColor} ${iconClass}`;
+            }
+            
+            function updateDate() {
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+                
+                // Update every minute to keep time accurate
+                setTimeout(updateDate, 60000);
+            }
+        });
+    </script>
 </body>
 </html>
